@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from wordcloud import WordCloud
 from nltk.tokenize import word_tokenize
 import pandas as pd
-import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression

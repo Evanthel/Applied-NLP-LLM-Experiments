@@ -1,3 +1,4 @@
+beautifulsoup4
 evaluate
 llama-cpp-python
 matplotlib
@@ -5,6 +6,7 @@ nltk
 numpy
 pandas
 pydub
+requests
 scikit-learn
 spacy
 SpeechRecognition

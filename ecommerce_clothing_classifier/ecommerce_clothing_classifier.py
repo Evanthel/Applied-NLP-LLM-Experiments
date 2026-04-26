@@ -1,8 +1,7 @@
-import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import DataLoader
 from torchmetrics import Accuracy, Precision, Recall
 
 # Load datasets
@@ -12,14 +11,6 @@ import torchvision.transforms as transforms
 train_data = datasets.FashionMNIST(root='./data', train=True, download=True, transform=transforms.ToTensor())
 test_data = datasets.FashionMNIST(root='./data', train=False, download=True, transform=transforms.ToTensor())
 
-import torch
-import torch.nn as nn
-import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-from torchmetrics import Accuracy, Precision, Recall
-
-# Get the number of classes
-classes = train_data.classes
 num_classes = len(train_data.classes)
 
 # Define some relevant variables
@@ -96,9 +87,9 @@ dataloader_test = DataLoader(
     shuffle=False,
 )
 # Define the metrics
-accuracy_metric = Accuracy(task='multiclass', num_classes=num_classes)
-precision_metric = Precision(task='multiclass', num_classes=num_classes, average=None)
-recall_metric = Recall(task='multiclass', num_classes=num_classes, average=None)
+accuracy_metric = Accuracy("multiclass", num_classes=num_classes)
+precision_metric = Precision("multiclass", num_classes=num_classes, average=None)
+recall_metric = Recall("multiclass", num_classes=num_classes, average=None)
 
 # Run model on test set
 net.eval()

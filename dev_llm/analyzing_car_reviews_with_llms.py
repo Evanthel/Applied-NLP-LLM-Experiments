@@ -1,9 +1,4 @@
-'''Car-ing is sharing, an auto dealership company for car sales and rental, is taking their services to the next level thanks to Large Language Models (LLMs).
-
-As their newly recruited AI and NLP developer, you've been asked to prototype a chatbot app with multiple functionalities that not only assist customers but also provide support to human agents in the company.
-
-The solution should receive textual prompts and use a variety of pre-trained Hugging Face LLMs to respond to a series of tasks, e.g. classifying the sentiment in a car’s text review, answering a customer question, summarizing or translating text, etc.
-'''
+"""Multi-step Hugging Face workflow for review sentiment, translation, question answering, and summarization."""
 
 # Import necessary packages
 import pandas as pd
@@ -22,8 +17,7 @@ real_labels = df['Class'].tolist()
 
 # Start your code here!
 from transformers import pipeline
-model = pipeline(task = 'sentiment-analysis', model = 'distilbert-base-uncased-finetuned-sst-2-english')
-from sklearn.metrics import accuracy_score, f1_score
+model = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
 predicted_labels = model(reviews)
 references = [1 if label == "POSITIVE" else 0 for label in real_labels]
 predictions = [1 if label['label'] == "POSITIVE" else 0 for label in predicted_labels]

@@ -1,7 +1,5 @@
-from collections import Counter
 import nltk, json
 import numpy as np
-import pandas as pd
 from sklearn.model_selection import train_test_split
 import torch
 import torch.nn as nn
@@ -17,7 +15,6 @@ with open("text.json", 'r') as f2:
 labels = np.load('labels.npy')
 # Dictionaries to store the word to index mappings and vice versa
 word2idx = {o:i for i,o in enumerate(words)}
-idx2word = {i:o for i,o in enumerate(words)}
 
 # Looking up the mapping dictionary and assigning the index to the respective words
 for i, sentence in enumerate(text):
@@ -71,17 +68,14 @@ for epoch in range(3):
         loss.backward()
         optimizer.step()
 
-accuracy_metric = Accuracy(task='multiclass', num_classes=len(np.unique(labels)))
-precision_metric = Precision(task='multiclass', num_classes=len(np.unique(labels)), average=None)
-recall_metric = Recall(task='multiclass', num_classes=len(np.unique(labels)), average=None)
+accuracy_metric = Accuracy("multiclass", num_classes=len(np.unique(labels)))
+precision_metric = Precision("multiclass", num_classes=len(np.unique(labels)), average=None)
+recall_metric = Recall("multiclass", num_classes=len(np.unique(labels)), average=None)
 
 model.eval()
-predicted = []
-
 for i, (inputs, labels) in enumerate(test_loader):
     output = model(inputs)
     cat = torch.argmax(output, dim=-1)
-    predicted.extend(cat.tolist())
     accuracy_metric(cat, labels)
     precision_metric(cat, labels)
     recall_metric(cat, labels)
