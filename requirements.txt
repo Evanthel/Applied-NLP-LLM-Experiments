@@ -1,0 +1,16 @@
+evaluate
+llama-cpp-python
+matplotlib
+nltk
+numpy
+pandas
+pydub
+scikit-learn
+spacy
+SpeechRecognition
+sentencepiece
+torch
+torchmetrics
+torchvision
+transformers
+wordcloud

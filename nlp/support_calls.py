@@ -1,14 +1,9 @@
 # Analyzing Customer Support Calls
-!pip install SpeechRecognition
-!pip install pydub
-!pip install spacy
-!python3 -m spacy download en_core_web_sm
-
 # Import required libraries
 import pandas as pd
 
 import nltk
-nltk.download('vader_lexicon')
+nltk.download("vader_lexicon", quiet=True)
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 import speech_recognition as sr
@@ -18,7 +13,7 @@ import spacy
 
 # Is the audio compatible for future speech recognition modeling?
 recognizer = sr.Recognizer()
-with sr.AudioFile('sample_customer_call.wav') as source:
+with sr.AudioFile("sample_customer_call.wav") as source:
     audio_data = recognizer.record(source)
 transcribed_text = recognizer.recognize_google(audio_data)
 audio = AudioSegment.from_file("sample_customer_call.wav")
@@ -27,8 +22,10 @@ frame_rate = audio.frame_rate
 
 # How many calls have a true positive sentiment?
 
-cct = pd.read_csv('customer_call_transcriptions.csv')
+cct = pd.read_csv("customer_call_transcriptions.csv")
 sia = SentimentIntensityAnalyzer()
+
+
 def get_sentiment(text):
     scores = sia.polarity_scores(text)
     compound = scores["compound"]
@@ -38,9 +35,14 @@ def get_sentiment(text):
         return "negative"
     else:
         return "neutral"
-        
-cct["sentiment_predicted"] = cct["text"].apply(get_sentiment)
-true_positive = cct.loc[ (cct["sentiment_label"] == cct["sentiment_predicted"]) & (cct["sentiment_predicted"] == "positive")]
+    return "neutral"
+
+
+cct["sentiment_predicted"] = cct["text"].fillna("").astype(str).apply(get_sentiment)
+true_positive = cct.loc[
+    (cct["sentiment_label"] == cct["sentiment_predicted"])
+    & (cct["sentiment_predicted"] == "positive")
+]
 true_positive = len(true_positive)
 
 # What is the most frequently named entity across all of the transcriptions?
@@ -48,14 +50,15 @@ true_positive = len(true_positive)
 nlp = spacy.load("en_core_web_sm")
 texts = cct["text"].fillna("").astype(str)
 entity_freq = {}
-for text in cct["text"].astype(str):
+for text in texts:
     doc = nlp(text)
     for ent in doc.ents:
+        ent_text = ent.text
         entity_freq[ent_text] = entity_freq.get(ent_text, 0) + 1
 
-most_freq_ent = max(entity_freq, key=entity_freq.get)
+most_freq_ent = max(entity_freq, key=entity_freq.get) if entity_freq else None
 
-#Which call is the most similar to "wrong package delivery"?
+# Which call is the most similar to "wrong package delivery"?
 
 query = "wrong package delivery"
 query_doc = nlp(query)
